@@ -14,8 +14,8 @@ struct key_config default_key_config = {
       .switch_magnetic_profile_id = 0,
   },
   .deadzones = {
-      .start_offset = 0,
-      .end_offset = 0,
+      .top_offset = 0,
+      .bottom_offset = 0,
   },
   .actuation_distance = 128,
   .release_distance = 50,
@@ -34,9 +34,9 @@ struct key_config default_key_config = {
   } }
 };
 
-struct user_config config;
-
-uint8_t is_calibrating;
+struct user_config config = {
+  .key_configs_length = 1,
+};
 
 // store it into a matrix ??
 // store it into a matrix ??
@@ -57,7 +57,11 @@ void init_config() {
 
   for (uint8_t i = 0; i < config.key_configs_length; i++) {
     config.key_configs[i] = default_key_config;
-    config.key_configs[i].layers[0].keycodes[0] = default_keycode;
+    for (uint8_t j = 0; j < config.key_configs[i].layers_length; j++) {
+      for (uint8_t k = 0; k < config.key_configs[i].layers[j].keycodes_length; k++) {
+        config.key_configs[i].layers[j].keycodes[k] = default_keycode;
+      }
+    }
   }
 };
 
@@ -77,17 +81,26 @@ void init_key_states() {
 };
 
 void mlev_set_switch_value(uint8_t adc_channel, uint8_t amux_channel, uint32_t value) {
-
+  for (uint8_t i = 0; i < config.key_configs_length; i++) {
+    if (config.key_configs[i].hardware.adc_channel == adc_channel && config.key_configs[i].hardware.mux_channel == amux_channel) {
+      key_states[i].raw_adc_value = value;
+      break;
+    }
+  }
 };
 
 void mlev_init() {
   // check config present
   // check config validity (version ?)
   // calibrate switches
+
+  init_config();
+  init_key_states();
 };
 
 void mlev_task() {
   // tud_task
   // update keys states
   // send hid reports
+
 };

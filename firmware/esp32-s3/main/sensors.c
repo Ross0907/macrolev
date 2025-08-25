@@ -6,6 +6,7 @@
 #include "freertos/task.h"
 #include "macrolev.h"
 #include "sdkconfig.h"
+#include <sensors.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -164,6 +165,11 @@ void adc_task(void *pvParameters) {
       }
     }
   }
+}
+
+void sensors_init() {
+  gpio_init();
+  adc_init();
 }
 
 // void debug_task(void *pvParameters) {

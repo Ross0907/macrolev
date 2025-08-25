@@ -17,8 +17,8 @@ enum magnet_direction {
 };
 
 struct deadzones {
-  uint8_t start_offset;
-  uint8_t end_offset;
+  uint8_t top_offset;
+  uint8_t bottom_offset;
 };
 
 struct rapid_trigger {

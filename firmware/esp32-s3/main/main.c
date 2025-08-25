@@ -1,6 +1,8 @@
 #include "config_storage.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
+#include "macrolev.h"
+#include "sensors.h"
 #include "usb.h"
 #include <stdio.h>
 #include <string.h>
@@ -18,11 +20,10 @@
 
 static const char *TAG = "MACROLEV";
 
-#define BOOT_MODE_PIN GPIO_NUM_0
-
 void app_main(void) {
   usb_init();
-  config_storage_init();
+  sensors_init();
+  mlev_init();
 
   // Main loop
   while (1) {
